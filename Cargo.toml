@@ -1,0 +1,18 @@
+[package]
+name = "simple_scheduler"
+version = "0.0.1"
+edition = "2021"
+authors = ["Tomasz Komanski"]
+license = "MIT"
+
+[lib]
+crate-type = ["rlib", "dylib"]
+
+[profile.release]
+# opt-level = 'z'   # Optimize for size
+opt-level = 3       # Optimize for speed
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce codegen units to improve optimizations
+
+[dependencies]
+chrono = "0.4"
