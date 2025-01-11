@@ -12,7 +12,7 @@ pub struct Job {
     pub worker: Arc<dyn Worker + Sync + Send>,
     pub close_thread: Arc<AtomicBool>,
     pub thread: Option<JoinHandle<()>>,
-    pub sender: Arc<Mutex<Sender<()>>>, 
+    pub sender: Sender<()>, 
     pub receiver: Arc<Mutex<Receiver<()>>>,
     pub unlock_tag: Arc<AtomicBool>,
 }
@@ -27,7 +27,7 @@ impl Job {
             worker: Arc::new(worker),
             close_thread: Arc::new(AtomicBool::new(false)),
             thread: None,
-            sender: Arc::new(Mutex::new(sender)),
+            sender: sender,
             receiver: Arc::new(Mutex::new(receiver)),
             unlock_tag: Arc::new(AtomicBool::new(false)),
         };
@@ -135,13 +135,11 @@ impl Job {
 
     fn unlock_thread_loop(&mut self) {
         self.unlock_tag.swap(true, Ordering::Relaxed);
-        let tx: MutexGuard<'_, Sender<()>> = self.sender.lock().unwrap();
-        tx.send(()).unwrap();
+        self.sender.send(()).unwrap();
     }
 
     fn lock_thread_loop(&mut self) {
         self.unlock_tag.swap(false, Ordering::Relaxed);
-        let tx: MutexGuard<'_, Sender<()>> = self.sender.lock().unwrap();
-        tx.send(()).unwrap();
+        self.sender.send(()).unwrap();
     }
 }
