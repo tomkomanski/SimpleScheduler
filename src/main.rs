@@ -3,7 +3,7 @@ use std::time::Duration;
 use chrono::Local;
 
 extern crate simple_scheduler;
-use simple_scheduler::{worker::Worker, Scheduler};
+use simple_scheduler::{worker::Worker, scheduler::Scheduler};
 
 fn main() {
     pub struct Group {

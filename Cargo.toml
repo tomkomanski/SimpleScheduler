@@ -1,6 +1,6 @@
 [package]
 name = "simple_scheduler"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 authors = ["Tomasz Komanski"]
 license = "MIT"
@@ -16,3 +16,4 @@ codegen-units = 1   # Reduce codegen units to improve optimizations
 
 [dependencies]
 chrono = "0.4"
+lazy_static = "1.4"
